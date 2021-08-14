@@ -1,4 +1,3 @@
-from django.db.models import fields
 from rest_framework import serializers
 from .models import Question, Answer, Comment
 
@@ -17,5 +16,5 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Answer
+        model = Comment
         fields = '__all__'
