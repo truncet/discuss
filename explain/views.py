@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+from explain.models import Answer, Comment, Question
 from explain.serializers import AnswerSerializer, QuestionSerializer
-from explain.models import Question, Answer, Comment
 
 # Create your views here.
 

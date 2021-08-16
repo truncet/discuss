@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Question, Answer, Comment
+
+from .models import Answer, Comment, Question
 
 
 class QuestionSerializer (serializers.ModelSerializer):
