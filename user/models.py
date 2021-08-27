@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy
 
 class CustomAccountManager(BaseUserManager):
 
-    def create_superuser(self, user_email, user_name, password, **other_fields):
+    def create_superuser(self, email, username, password, **other_fields):
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
@@ -19,24 +19,24 @@ class CustomAccountManager(BaseUserManager):
         if other_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must be assigned to is_superuser=True')
 
-        return self.create_user(user_email, user_name, password, **other_fields)
+        return self.create_user(email, username, password, **other_fields)
 
-    def create_user(self, user_email, user_name, password, **other_fields):
-
-        if not user_email:
+    def create_user(self, email, username, password=None, **other_fields):
+        print(email, username, other_fields)
+        if not email:
             raise ValueError(gettext_lazy('You must provide an email address'))
 
-        user_email = self.normalize_email(user_email)
-        user = self.model(user_email=user_email,
-                          user_name=user_name, **other_fields)
+        email = self.normalize_email(email)
+        user = self.model(email=email,
+                          username=username, **other_fields)
         user.set_password(password)
         user.save()
         return user
 
 
 class NewUser(AbstractBaseUser, PermissionsMixin):
-    user_name = models.CharField(max_length=20, unique=True)
-    user_email = models.EmailField(unique=True)
+    username = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(unique=True)
     joined_date = models.DateTimeField(default=timezone.now)
     about = models.TextField(gettext_lazy('about'), max_length=500, blank=True)
     is_staff = models.BooleanField(default=False)
@@ -44,8 +44,8 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomAccountManager()
 
-    USERNAME_FIELD = 'user_email'
-    REQUIRED_FIELDS = ['user_name']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return self.user_name
+        return self.username
