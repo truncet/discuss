@@ -7,6 +7,11 @@ from django.utils.translation import gettext_lazy
 # Create your models here.
 
 
+class UserManager(models.Manager):
+    def get_queryset(self):
+        return super(UserManager, self).get_queryset().filter(is_active=True)
+
+
 class CustomAccountManager(BaseUserManager):
 
     def create_superuser(self, email, username, password, **other_fields):
@@ -38,14 +43,16 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
     joined_date = models.DateTimeField(default=timezone.now)
-    about = models.TextField(gettext_lazy('about'), max_length=500, blank=True)
+    about = models.TextField(gettext_lazy(
+        'about'), max_length=500, blank=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects = CustomAccountManager()
+    users = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return self.username
+        return self.email

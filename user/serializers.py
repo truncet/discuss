@@ -1,11 +1,15 @@
+import json
+from django.http.response import JsonResponse
 from rest_framework import serializers
+from django.db import IntegrityError
 
 from .models import NewUser
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = '__all__'
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewUser
+        fields = ['id', 'username', 'email']
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -23,6 +27,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)
-
-        instance.save()
-        return instance
+        try:
+            instance.save()
+            return instance
+        except IntegrityError as e:
+            return self.Meta.model()

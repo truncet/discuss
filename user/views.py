@@ -1,11 +1,13 @@
 
+from user.models import NewUser
 from django.contrib.auth.models import PermissionsMixin
+from django.http.response import JsonResponse
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, UserSerializer
 
 #from user.serializers import UserSerializer
 
@@ -63,3 +65,12 @@ class CustomUserCreate(APIView):
                 json = serializer.data
                 return Response(json, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ShowCustomer(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = NewUser.users.filter(email=request.user)
+        user_servializer = UserSerializer(user, many=True)
+        return Response(user_servializer.data)

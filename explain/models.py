@@ -15,10 +15,16 @@ class Entity(models.Model):
         abstract = True
 
 
+class QuestionManager(models.Manager):
+    def get_queryset(self):
+        return super(QuestionManager, self).get_queryset()
+
+
 class Question(Entity):
     question_id = models.BigAutoField(primary_key=True)
     question_title = models.TextField(max_length=200)
     question_description = models.TextField(max_length=2000)
+    questions = QuestionManager()
 
 
 class Answer(Entity):

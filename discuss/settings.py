@@ -19,7 +19,7 @@ SECRET_KEY = 'django-insecure-sq7#u@fo3=cmiaj^)1kmy_7kafg$9-mxwcix6tu74mdd53r75w
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.24', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.24', '127.0.0.1', 'localhost']
 
 
 INSTALLED_APPS = [
@@ -31,18 +31,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'rest_framework',
+    'corsheaders',
     'explain',
     'user',
     'oauth2_provider',
     'social_django',
     'drf_social_oauth2',
-
-
 ]
 
 SITE_ID = 1
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -131,7 +131,10 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://192.168.1.24:8000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
+#CORS_ORIGIN_ALLOW_ALL = True
 
 
 AUTHENTICATION_BACKENDS = (

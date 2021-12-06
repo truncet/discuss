@@ -3,10 +3,16 @@ from rest_framework import serializers
 from .models import Answer, Comment, Question
 
 
-class QuestionSerializer (serializers.ModelSerializer):
+class QuestionSerializerAllField (serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = '__all__'
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ['question_id', 'question_title']
 
 
 class AnswerSerializer(serializers.ModelSerializer):
